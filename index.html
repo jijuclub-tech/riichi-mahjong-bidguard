@@ -85,7 +85,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #
     <span id="score">25,000</span>
   </div>
   <div class="table">
-    <div style="text-align:center; opacity:0.5; margin-bottom:20px;">테이블</div>
+    <div id="guide" style="background:#1a2a1a; border:1px solid #4a9; border-radius:10px; padding:12px; margin-bottom:16px; text-align:center; color:#ffd700; font-size:13px; line-height:1.6;"></div>
+    <div style="text-align:center; opacity:0.5; margin-bottom:12px;">테이블</div>
     <div class="hand" id="hand"></div>
   </div>
   <div style="text-align:center; margin-top:16px;">
@@ -131,15 +132,13 @@ function recommendTile() {
   if (pairs === 0 && triples === 0) situation += '아직 세트나 짝이 없습니다. ';
   situation += '화료에 가까워지려면 같은 패 3장(퐁)이나 연속 패(치)를 만드는 게 유리합니다.';
 
-  document.getElementById('info')?.remove();
-  const info = document.createElement('div');
-  info.id = 'info';
-  info.style.cssText = 'text-align:center; color:#ffd700; margin:10px 0; font-size:13px; line-height:1.6; max-width:600px; margin-left:auto; margin-right:auto;';
-  info.innerHTML = 
-    '<div style="margin-bottom:6px;"><b>현재 상황</b><br>' + situation + '</div>' +
-    '<div>초보 추천: <b>' + hand[best] + '</b> 를 버리세요<br>' +
-    '<span style="opacity:0.85;">' + reason + ' 룰: 같은 패 3장=퐁, 연속 패 3장=치</span></div>';
-  document.getElementById('hand').parentElement.insertBefore(info, document.getElementById('hand'));
+  const guide = document.getElementById('guide');
+  if (guide) {
+    guide.innerHTML = 
+      '<div style="margin-bottom:6px;"><b>현재 상황</b><br>' + situation + '</div>' +
+      '<div>추천 패: <b style="font-size:18px;">' + hand[best] + '</b> 를 버리세요<br>' +
+      '<span style="opacity:0.85;">' + reason + '<br>룰: 같은 패 3장=퐁, 연속 패 3장=치</span></div>';
+  }
 }
 
 function selectSlot(el, slot) {
