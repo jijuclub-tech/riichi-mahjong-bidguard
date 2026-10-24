@@ -42,12 +42,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #
   <div class="slot" onclick="selectSlot(this, 'lunch')">
     <h3>점심 대국</h3>
     <div>12:30 ~ 13:00</div>
-    <div style="font-size:12px; margin-top:4px; color:#4a9;">30분</div>
+    <div style="font-size:12px; margin-top:4px; color:#4a9;">4인</div>
   </div>
   <div class="slot" onclick="selectSlot(this, 'dinner')">
     <h3>저녁 대국</h3>
     <div>20:00 ~ 22:00</div>
-    <div style="font-size:12px; margin-top:4px; color:#4a9;">2시간</div>
+    <div style="font-size:12px; margin-top:4px; color:#4a9;">4인</div>
+  </div>
+  <div class="slot" onclick="selectSlot(this, 'practice')">
+    <h3>1인 연습</h3>
+    <div>언제든지</div>
+    <div style="font-size:12px; margin-top:4px; color:#4a9;">AI 상대</div>
   </div>
 </div>
 
@@ -104,21 +109,36 @@ function recommendTile() {
   const counts = {};
   hand.forEach(t => counts[t] = (counts[t] || 0) + 1);
   let best = -1;
+  let reason = '';
   for (let i = 0; i < hand.length; i++) {
     if (counts[hand[i]] === 1) {
       best = i;
+      reason = '혼자 있는 패라 버리기 좋습니다.';
       break;
     }
   }
-  if (best === -1) best = 0;
+  if (best === -1) {
+    best = 0;
+    reason = '일단 이 패를 버리는 것을 추천합니다.';
+  }
   recommendIndex = best;
+
+  const pairs = Object.values(counts).filter(c => c >= 2).length;
+  const triples = Object.values(counts).filter(c => c >= 3).length;
+  let situation = '현재 손패: ';
+  if (pairs > 0) situation += pairs + '개의 짝(쌍)이 있습니다. ';
+  if (triples > 0) situation += triples + '개의 3장 세트가 있습니다. ';
+  if (pairs === 0 && triples === 0) situation += '아직 세트나 짝이 없습니다. ';
+  situation += '화료에 가까워지려면 같은 패 3장(퐁)이나 연속 패(치)를 만드는 게 유리합니다.';
 
   document.getElementById('info')?.remove();
   const info = document.createElement('div');
   info.id = 'info';
-  info.style.cssText = 'text-align:center; color:#ffd700; margin:10px 0; font-size:13px; line-height:1.5;';
-  info.innerHTML = '초보 추천: <b>' + hand[best] + '</b> 를 버리세요<br>' +
-    '<span style="opacity:0.8;">룰: 같은 패가 3장 모이면 퐁, 연속된 패 3장이면 치가 됩니다.</span>';
+  info.style.cssText = 'text-align:center; color:#ffd700; margin:10px 0; font-size:13px; line-height:1.6; max-width:600px; margin-left:auto; margin-right:auto;';
+  info.innerHTML = 
+    '<div style="margin-bottom:6px;"><b>현재 상황</b><br>' + situation + '</div>' +
+    '<div>초보 추천: <b>' + hand[best] + '</b> 를 버리세요<br>' +
+    '<span style="opacity:0.85;">' + reason + ' 룰: 같은 패 3장=퐁, 연속 패 3장=치</span></div>';
   document.getElementById('hand').parentElement.insertBefore(info, document.getElementById('hand'));
 }
 
@@ -126,7 +146,15 @@ function selectSlot(el, slot) {
   document.querySelectorAll('.slot').forEach(s => s.classList.remove('active'));
   el.classList.add('active');
   currentSlot = slot;
-  simulatePlayers();
+  if (slot === 'practice') {
+    document.getElementById('startBtn').disabled = false;
+    document.getElementById('startBtn').textContent = '100원 내고 1인 연습 시작';
+    document.querySelectorAll('.player')[1].querySelector('.status').textContent = 'AI';
+    document.querySelectorAll('.player')[2].querySelector('.status').textContent = 'AI';
+    document.getElementById('aiSlot').querySelector('.status').textContent = 'AI';
+  } else {
+    simulatePlayers();
+  }
 }
 
 function showRealMatch() {
@@ -161,7 +189,9 @@ function startGame() {
   alert('100원 결제 완료\\n\\n초보 모드: 룰을 설명하면서 진행합니다.');
   document.getElementById('lobby').style.display = 'none';
   document.getElementById('gameArea').style.display = 'block';
-  document.getElementById('roundInfo').textContent = currentSlot === 'lunch' ? '점심 동풍전 (초보)' : '저녁 한장전 (초보)';
+  document.getElementById('roundInfo').textContent = 
+    currentSlot === 'practice' ? '1인 연습 (AI 상대)' :
+    currentSlot === 'lunch' ? '점심 동풍전 (초보)' : '저녁 한장전 (초보)';
   deal();
 }
 
