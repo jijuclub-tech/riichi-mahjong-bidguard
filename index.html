@@ -3,63 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>리치 마작 - 4인 대국</title>
+<title>리치 마작 - BidGuard</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #111; color: #eee; min-height: 100vh; }
-.header { background: #1a1a1a; padding: 16px; text-align: center; border-bottom: 1px solid #333; }
-.header h1 { font-size: 22px; }
-.time-slots { display: flex; gap: 12px; padding: 16px; justify-content: center; flex-wrap: wrap; }
-.slot { background: #222; border: 2px solid #333; border-radius: 12px; padding: 16px 24px; text-align: center; min-width: 180px; cursor: pointer; }
-.slot.active { border-color: #4a9; background: #1a3a2a; }
-.slot h3 { margin-bottom: 6px; }
-.lobby { padding: 20px; max-width: 800px; margin: 0 auto; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: linear-gradient(135deg, #0d1f0d 0%, #1a2a1a 100%); color: #eee; min-height: 100vh; }
+.header { background: rgba(0,0,0,0.6); padding: 20px; text-align: center; border-bottom: 2px solid #4a9; }
+.header h1 { font-size: 26px; letter-spacing: 2px; }
+.menu-cards { display: flex; gap: 16px; padding: 24px; justify-content: center; flex-wrap: wrap; }
+.card { background: linear-gradient(145deg, #1e3a1e, #0f2a0f); border: 3px solid #5a8a4a; border-radius: 16px; padding: 20px; width: 220px; text-align: center; cursor: pointer; transition: all 0.2s; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+.card:hover { transform: translateY(-6px); border-color: #7ac; }
+.card.active { border-color: #ffd700; box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+.card h3 { margin-bottom: 8px; color: #c8e6c8; }
+.lobby { padding: 20px; max-width: 900px; margin: 0 auto; }
 .players { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 20px 0; }
-.player { background: #1e1e1e; border-radius: 10px; padding: 14px; display: flex; align-items: center; gap: 12px; }
-.player.ai { opacity: 0.7; }
-.avatar { width: 48px; height: 48px; border-radius: 50%; background: #333; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.player { background: rgba(30,50,30,0.8); border-radius: 12px; padding: 14px; display: flex; align-items: center; gap: 12px; border: 1px solid #4a6a4a; }
+.avatar { width: 50px; height: 50px; border-radius: 50%; background: #333; display: flex; align-items: center; justify-content: center; font-size: 22px; }
 .status { margin-left: auto; font-size: 13px; color: #4a9; }
-.btn { background: #2a6a3a; color: white; border: none; padding: 14px 28px; border-radius: 10px; font-size: 16px; cursor: pointer; display: block; margin: 20px auto; }
-.btn:disabled { background: #333; cursor: not-allowed; }
-.real-match { background: #1a2a1a; border: 2px solid #4a9; border-radius: 12px; padding: 16px; margin: 20px auto; max-width: 500px; text-align: center; }
-.real-match h3 { color: #4a9; margin-bottom: 8px; }
-.game-area { display: none; padding: 16px; }
-.table { background: #0a3a1a; border: 8px solid #5a3a1a; border-radius: 16px; min-height: 400px; padding: 20px; position: relative; }
-.hand { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
-.tile { width: 42px; height: 58px; background: #fff8e8; border: 2px solid #c0a080; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; opacity: 0.7; }
-.tile.recommended { opacity: 1; background: #fff3c4; border-color: #ffd700; border-width: 3px; box-shadow: 0 0 16px #ffd700; transform: translateY(-10px) scale(1.1); animation: pulse 1s infinite; z-index: 2; position: relative; }
-@keyframes pulse { 50% { box-shadow: 0 0 24px #ffd700; } }
-.info-bar { background: #1a1a1a; padding: 10px 16px; display: flex; justify-content: space-between; margin-bottom: 12px; border-radius: 8px; }
-.fee-notice { background: #2a1a1a; border: 1px solid #6a3a2a; border-radius: 10px; padding: 12px; text-align: center; margin: 16px auto; max-width: 400px; font-size: 14px; }
+.btn { background: linear-gradient(145deg, #2a6a3a, #1a4a2a); color: white; border: none; padding: 14px 28px; border-radius: 12px; font-size: 16px; cursor: pointer; display: block; margin: 16px auto; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+.btn:hover { transform: translateY(-2px); }
+.btn:disabled { background: #333; cursor: not-allowed; transform: none; }
+.fee-notice, .real-match { background: rgba(42,26,26,0.8); border: 1px solid #6a3a2a; border-radius: 12px; padding: 14px; text-align: center; margin: 16px auto; max-width: 480px; }
+.real-match { border-color: #4a9; background: rgba(26,42,26,0.8); }
+.game-area { display: none; padding: 12px; }
+.table-wrap { background: #0a3a1a; border: 12px solid #5a3a1a; border-radius: 24px; padding: 16px; min-height: 520px; position: relative; box-shadow: inset 0 0 30px rgba(0,0,0,0.5); }
+.player-area { position: absolute; text-align: center; }
+.player-area.bottom { bottom: 20px; left: 50%; transform: translateX(-50%); }
+.player-area.top { top: 20px; left: 50%; transform: translateX(-50%); }
+.player-area.left { left: 20px; top: 50%; transform: translateY(-50%); }
+.player-area.right { right: 20px; top: 50%; transform: translateY(-50%); }
+.opp-tiles { display: flex; gap: 3px; justify-content: center; }
+.opp-tile { width: 28px; height: 40px; background: linear-gradient(145deg, #d0c0a0, #a08060); border: 1px solid #806040; border-radius: 3px; box-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+.hand { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+.tile { width: 46px; height: 64px; background: linear-gradient(145deg, #fff8e0, #e8d8b0); border: 2px solid #b09070; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; box-shadow: 2px 3px 6px rgba(0,0,0,0.4); position: relative; }
+.tile.recommended { background: linear-gradient(145deg, #fff3c0, #ffd780); border-color: #ffd700; border-width: 3px; box-shadow: 0 0 18px #ffd700, 2px 3px 6px rgba(0,0,0,0.4); transform: translateY(-12px) scale(1.08); z-index: 5; animation: glow 1.2s infinite; }
+@keyframes glow { 50% { box-shadow: 0 0 28px #ffd700, 2px 3px 6px rgba(0,0,0,0.4); } }
+#guide { background: rgba(26,42,26,0.9); border: 1px solid #4a9; border-radius: 12px; padding: 12px; margin: 12px auto; max-width: 640px; text-align: center; color: #ffd700; }
+.info-bar { background: rgba(0,0,0,0.6); padding: 10px 16px; display: flex; justify-content: space-between; border-radius: 8px; margin-bottom: 8px; }
 </style>
 </head>
 <body>
 <div class="header">
-  <h1>리치 마작 · 4인 대국</h1>
-  <p style="font-size:14px; opacity:0.7; margin-top:4px;">점심 12:30 · 저녁 20:00~22:00</p>
+  <h1>🀄 리치 마작 · BidGuard</h1>
+  <p style="font-size:14px; opacity:0.8; margin-top:6px;">점심 12:30 · 저녁 20:00~22:00 · 1인 연습</p>
 </div>
 
-<div class="time-slots">
-  <div class="slot" onclick="selectSlot(this, 'lunch')">
+<div class="menu-cards">
+  <div class="card" onclick="selectSlot(this, 'lunch')">
     <h3>점심 대국</h3>
     <div>12:30 ~ 13:00</div>
-    <div style="font-size:12px; margin-top:4px; color:#4a9;">4인</div>
+    <div style="margin-top:8px; color:#4a9; font-weight:bold;">4인 정시</div>
   </div>
-  <div class="slot" onclick="selectSlot(this, 'dinner')">
+  <div class="card" onclick="selectSlot(this, 'dinner')">
     <h3>저녁 대국</h3>
     <div>20:00 ~ 22:00</div>
-    <div style="font-size:12px; margin-top:4px; color:#4a9;">4인</div>
+    <div style="margin-top:8px; color:#4a9; font-weight:bold;">4인 정시</div>
   </div>
-  <div class="slot" onclick="selectSlot(this, 'practice')">
+  <div class="card" onclick="selectSlot(this, 'practice')">
     <h3>1인 연습</h3>
     <div>언제든지</div>
-    <div style="font-size:12px; margin-top:4px; color:#4a9;">AI 상대</div>
+    <div style="margin-top:8px; color:#ffd700; font-weight:bold;">AI 초보 가이드</div>
   </div>
 </div>
 
 <div class="lobby" id="lobby">
   <h2 style="text-align:center; margin-bottom:8px;">대기실</h2>
-  <p style="text-align:center; opacity:0.6; font-size:14px;">4명이 모이면 시작됩니다. 부족하면 AI가 참여합니다.</p>
+  <p style="text-align:center; opacity:0.7; font-size:14px;">4명이 모이면 시작 · 부족 시 AI 투입</p>
   
   <div class="players" id="players">
     <div class="player"><div class="avatar">나</div><div>나</div><div class="status">준비</div></div>
@@ -71,10 +79,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #
   <div class="fee-notice">처음 이용 시 입장료 <strong>100원</strong></div>
 
   <div class="real-match">
-    <h3>실전대결 · 월 1회</h3>
-    <p style="font-size:14px; opacity:0.8; margin:8px 0;">특정 식당/호텔에서 오프라인 대국</p>
-    <p style="font-size:13px; color:#4a9;">최근 30일 점수 상위 6명 선발 (10판 이상)</p>
-    <button class="btn" onclick="showRealMatch()" style="margin-top:12px; padding:10px 20px; font-size:14px;">이번 달 실전대결 보기</button>
+    <h3 style="color:#4a9;">실전대결 · 월 1회</h3>
+    <p style="font-size:14px; opacity:0.8; margin:8px 0;">지정 식당/호텔 · 상위 6명 선발 → 2팀 대결</p>
+    <button class="btn" onclick="showRealMatch()" style="margin-top:8px; padding:10px 20px;">이번 달 안내</button>
   </div>
 
   <button class="btn" id="startBtn" onclick="startGame()" disabled>100원 내고 시작</button>
@@ -85,15 +92,29 @@ body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #
     <span id="roundInfo">동풍전</span>
     <span id="score">25,000</span>
   </div>
-  <div class="table">
-    <div id="guide" style="background:#1a2a1a; border:1px solid #4a9; border-radius:10px; padding:12px; margin-bottom:16px; text-align:center; color:#ffd700; font-size:13px; line-height:1.6;"></div>
-    <div style="text-align:center; opacity:0.5; margin-bottom:12px;">테이블</div>
-    <div class="hand" id="hand"></div>
+  <div id="guide"></div>
+  <div class="table-wrap">
+    <div class="player-area top">
+      <div style="font-size:12px; margin-bottom:4px;">북 (AI)</div>
+      <div class="opp-tiles" id="topTiles"></div>
+    </div>
+    <div class="player-area left">
+      <div style="font-size:12px; margin-bottom:4px;">서 (AI)</div>
+      <div class="opp-tiles" id="leftTiles" style="flex-direction:column;"></div>
+    </div>
+    <div class="player-area right">
+      <div style="font-size:12px; margin-bottom:4px;">동 (AI)</div>
+      <div class="opp-tiles" id="rightTiles" style="flex-direction:column;"></div>
+    </div>
+    <div class="player-area bottom">
+      <div style="font-size:12px; margin-bottom:4px;">나 (남)</div>
+      <div class="hand" id="hand"></div>
+    </div>
   </div>
   <div style="text-align:center; margin-top:16px;">
     <button class="btn" id="discardBtn" onclick="discard()">버리기</button>
-    <button class="btn" id="autoBtn" onclick="autoDiscard()" style="background:#4a6a2a; display:none; margin-top:8px;">추천대로 버리기</button>
-    <button class="btn" onclick="riichi()" style="background:#6a3a2a; margin-top:8px;">리치</button>
+    <button class="btn" id="autoBtn" onclick="autoDiscard()" style="background:linear-gradient(145deg,#4a6a2a,#2a4a1a); display:none; margin-top:8px;">AI 추천대로 버리기</button>
+    <button class="btn" onclick="riichi()" style="background:linear-gradient(145deg,#6a3a2a,#4a2a1a); margin-top:8px;">리치</button>
   </div>
 </div>
 
@@ -106,6 +127,16 @@ let score = 25000;
 let isRiichi = false;
 let isBeginner = true;
 let recommendIndex = -1;
+
+function makeOppTiles(count) {
+  return Array(count).fill('<div class="opp-tile"></div>').join('');
+}
+
+function renderOpponents() {
+  document.getElementById('topTiles').innerHTML = makeOppTiles(13);
+  document.getElementById('leftTiles').innerHTML = makeOppTiles(13);
+  document.getElementById('rightTiles').innerHTML = makeOppTiles(13);
+}
 
 function recommendTile() {
   if (!isBeginner || hand.length === 0) return;
@@ -140,13 +171,14 @@ function recommendTile() {
       '<div style="margin-bottom:6px;"><b>현재 상황</b><br>' + situation + '</div>' +
       '<div style="background:#2a3a1a; padding:10px; border-radius:8px; margin-top:6px; border:1px solid #ffd700;">' +
       '<b style="color:#ffd700;">AI 추천 패</b><br>' +
-      '<span style="font-size:24px;">' + hand[best] + '</span><br>' +
+      '<span style="font-size:28px;">' + hand[best] + '</span><br>' +
       '<span style="opacity:0.9; font-size:12px;">' + reason + '</span></div>';
   }
+  renderHand();
 }
 
 function selectSlot(el, slot) {
-  document.querySelectorAll('.slot').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.card').forEach(s => s.classList.remove('active'));
   el.classList.add('active');
   currentSlot = slot;
   if (slot === 'practice') {
@@ -184,26 +216,28 @@ function simulatePlayers() {
     document.getElementById('aiSlot').querySelector('.status').textContent = '참여';
     document.getElementById('startBtn').disabled = false;
     document.getElementById('startBtn').textContent = '100원 내고 게임 시작';
-  }, 1500);
+  }, 1200);
 }
 
 function startGame() {
   if (!confirm('처음 이용 입장료 100원을 결제하시겠습니까?')) return;
-  alert('100원 결제 완료\\n\\n초보 모드: 룰을 설명하면서 진행합니다.');
+  alert('100원 결제 완료\\n\\n초보 모드: AI가 추천하면서 진행합니다.');
   document.getElementById('lobby').style.display = 'none';
+  document.querySelector('.menu-cards').style.display = 'none';
   document.getElementById('gameArea').style.display = 'block';
   document.getElementById('roundInfo').textContent = 
     currentSlot === 'practice' ? '1인 연습 (AI 상대 · 초보)' :
     currentSlot === 'lunch' ? '점심 동풍전 (초보)' : '저녁 한장전 (초보)';
   if (isBeginner) document.getElementById('autoBtn').style.display = 'block';
   deal();
+  renderOpponents();
 }
 
 function autoDiscard() {
   if (recommendIndex < 0) return;
   selected = recommendIndex;
   renderHand();
-  setTimeout(discard, 300);
+  setTimeout(discard, 400);
 }
 
 function deal() {
@@ -238,7 +272,7 @@ function discard() {
     if (hand.length < 14) hand.push(TILES[Math.floor(Math.random()*TILES.length)]);
     renderHand();
     recommendTile();
-  }, 600);
+  }, 500);
   renderHand();
 }
 
