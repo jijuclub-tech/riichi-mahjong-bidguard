@@ -138,8 +138,10 @@ function recommendTile() {
   if (guide) {
     guide.innerHTML = 
       '<div style="margin-bottom:6px;"><b>현재 상황</b><br>' + situation + '</div>' +
-      '<div style="background:#2a3a1a; padding:8px; border-radius:8px; margin-top:6px;">추천 패 (크게 표시됨): <b style="font-size:20px; color:#ffd700;">' + hand[best] + '</b><br>' +
-      '<span style="opacity:0.9;">' + reason + '</span></div>';
+      '<div style="background:#2a3a1a; padding:10px; border-radius:8px; margin-top:6px; border:1px solid #ffd700;">' +
+      '<b style="color:#ffd700;">AI 추천 패</b><br>' +
+      '<span style="font-size:24px;">' + hand[best] + '</span><br>' +
+      '<span style="opacity:0.9; font-size:12px;">' + reason + '</span></div>';
   }
 }
 
